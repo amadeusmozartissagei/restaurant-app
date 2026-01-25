@@ -16,7 +16,7 @@ class ErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -29,11 +29,7 @@ class ErrorWidget extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: theme.colorScheme.error.withValues(alpha: 0.1),
               ),
-              child: Icon(
-                icon,
-                size: 48,
-                color: theme.colorScheme.error,
-              ),
+              child: Icon(icon, size: 48, color: theme.colorScheme.error),
             ),
             const SizedBox(height: 24),
             Text(
@@ -95,7 +91,7 @@ class EmptyStateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -108,11 +104,7 @@ class EmptyStateWidget extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: theme.colorScheme.primary.withValues(alpha: 0.1),
               ),
-              child: Icon(
-                icon,
-                size: 48,
-                color: theme.colorScheme.primary,
-              ),
+              child: Icon(icon, size: 48, color: theme.colorScheme.primary),
             ),
             const SizedBox(height: 24),
             Text(
@@ -132,10 +124,7 @@ class EmptyStateWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ],
-            if (action != null) ...[
-              const SizedBox(height: 24),
-              action!,
-            ],
+            if (action != null) ...[const SizedBox(height: 24), action!],
           ],
         ),
       ),

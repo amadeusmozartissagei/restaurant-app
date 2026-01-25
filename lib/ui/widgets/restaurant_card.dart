@@ -17,7 +17,7 @@ class RestaurantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       clipBehavior: Clip.antiAlias,
@@ -44,14 +44,14 @@ class RestaurantCard extends StatelessWidget {
                     return Container(
                       width: 130,
                       height: 130,
-                      color: isDark 
-                          ? AppTheme.surfaceDark 
+                      color: isDark
+                          ? AppTheme.surfaceDark
                           : AppTheme.backgroundLight,
                       child: Center(
                         child: CircularProgressIndicator(
                           value: loadingProgress.expectedTotalBytes != null
                               ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
+                                    loadingProgress.expectedTotalBytes!
                               : null,
                           strokeWidth: 2,
                         ),
@@ -62,8 +62,8 @@ class RestaurantCard extends StatelessWidget {
                     return Container(
                       width: 130,
                       height: 130,
-                      color: isDark 
-                          ? AppTheme.surfaceDark 
+                      color: isDark
+                          ? AppTheme.surfaceDark
                           : AppTheme.backgroundLight,
                       child: Icon(
                         Icons.restaurant,

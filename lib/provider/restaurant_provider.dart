@@ -19,10 +19,13 @@ class RestaurantProvider extends ChangeNotifier {
 
   // State for restaurant detail
   ResultState<RestaurantDetail> _restaurantDetailState = const LoadingState();
-  ResultState<RestaurantDetail> get restaurantDetailState => _restaurantDetailState;
+  ResultState<RestaurantDetail> get restaurantDetailState =>
+      _restaurantDetailState;
 
   // State for search
-  ResultState<List<Restaurant>> _searchState = const NoDataState('Search for restaurants');
+  ResultState<List<Restaurant>> _searchState = const NoDataState(
+    'Search for restaurants',
+  );
   ResultState<List<Restaurant>> get searchState => _searchState;
 
   /// Fetch list of all restaurants
@@ -32,7 +35,7 @@ class RestaurantProvider extends ChangeNotifier {
 
     try {
       final response = await apiService.getRestaurantList();
-      
+
       if (response.error) {
         _restaurantListState = ErrorState(response.message);
       } else if (response.restaurants.isEmpty) {
@@ -55,7 +58,7 @@ class RestaurantProvider extends ChangeNotifier {
 
     try {
       final response = await apiService.getRestaurantDetail(id);
-      
+
       if (response.error) {
         _restaurantDetailState = ErrorState(response.message);
       } else {
@@ -82,7 +85,7 @@ class RestaurantProvider extends ChangeNotifier {
 
     try {
       final response = await apiService.searchRestaurants(query);
-      
+
       if (response.error) {
         _searchState = ErrorState(response.message);
       } else if (response.restaurants.isEmpty) {
@@ -101,6 +104,51 @@ class RestaurantProvider extends ChangeNotifier {
   /// Clear search results
   void clearSearch() {
     _searchState = const NoDataState('Search for restaurants');
+    notifyListeners();
+  }
+
+  // State for posting review
+  ResultState<String> _postReviewState = const NoDataState('');
+  ResultState<String> get postReviewState => _postReviewState;
+
+  /// Post a review for a restaurant
+  Future<bool> postReview({
+    required String restaurantId,
+    required String name,
+    required String review,
+  }) async {
+    _postReviewState = const LoadingState();
+    notifyListeners();
+
+    try {
+      final response = await apiService.postReview(
+        restaurantId: restaurantId,
+        name: name,
+        review: review,
+      );
+
+      if (response.error) {
+        _postReviewState = ErrorState(response.message);
+        notifyListeners();
+        return false;
+      } else {
+        _postReviewState = const SuccessState('Review posted successfully!');
+        // Refresh restaurant detail to show new review
+        await fetchRestaurantDetail(restaurantId);
+        return true;
+      }
+    } catch (e) {
+      _postReviewState = const ErrorState(
+        'Failed to post review. Please check your internet connection.',
+      );
+      notifyListeners();
+      return false;
+    }
+  }
+
+  /// Reset post review state
+  void resetPostReviewState() {
+    _postReviewState = const NoDataState('');
     notifyListeners();
   }
 }

@@ -7,32 +7,32 @@ class AppTheme {
   // Primary Colors
   static const Color primaryLight = Color(0xFF6366F1); // Indigo
   static const Color primaryDark = Color(0xFF818CF8);
-  
+
   // Secondary Colors
   static const Color secondaryLight = Color(0xFFF59E0B); // Amber
   static const Color secondaryDark = Color(0xFFFBBF24);
-  
+
   // Background Colors
   static const Color backgroundLight = Color(0xFFF8FAFC);
   static const Color backgroundDark = Color(0xFF0F172A);
-  
+
   // Surface Colors
   static const Color surfaceLight = Color(0xFFFFFFFF);
   static const Color surfaceDark = Color(0xFF1E293B);
-  
+
   // Card Colors
   static const Color cardLight = Color(0xFFFFFFFF);
   static const Color cardDark = Color(0xFF334155);
-  
+
   // Text Colors
   static const Color textPrimaryLight = Color(0xFF1E293B);
   static const Color textPrimaryDark = Color(0xFFF1F5F9);
   static const Color textSecondaryLight = Color(0xFF64748B);
   static const Color textSecondaryDark = Color(0xFF94A3B8);
-  
+
   // Rating Color
   static const Color ratingColor = Color(0xFFF59E0B);
-  
+
   // Success and Error Colors
   static const Color successColor = Color(0xFF10B981);
   static const Color errorColor = Color(0xFFEF4444);
@@ -66,9 +66,7 @@ class AppTheme {
       color: cardLight,
       elevation: 2,
       shadowColor: Colors.black.withValues(alpha: 0.1),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
     textTheme: _buildTextTheme(textPrimaryLight, textSecondaryLight),
     iconTheme: const IconThemeData(color: textPrimaryLight),
@@ -123,9 +121,7 @@ class AppTheme {
       color: cardDark,
       elevation: 4,
       shadowColor: Colors.black.withValues(alpha: 0.3),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
     textTheme: _buildTextTheme(textPrimaryDark, textSecondaryDark),
     iconTheme: const IconThemeData(color: textPrimaryDark),

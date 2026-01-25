@@ -8,6 +8,7 @@ import '../widgets/restaurant_card.dart';
 import '../widgets/loading_indicator.dart';
 import '../widgets/error_widget.dart' as custom;
 import 'restaurant_detail_page.dart';
+import 'search_page.dart';
 
 /// Restaurant List Page - Main page showing all restaurants
 class RestaurantListPage extends StatelessWidget {
@@ -16,13 +17,14 @@ class RestaurantListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             SliverAppBar(
               expandedHeight: 180,
+              collapsedHeight: 80,
               floating: false,
               pinned: true,
               elevation: 0,
@@ -63,6 +65,31 @@ class RestaurantListPage extends StatelessWidget {
                 ),
               ),
               actions: [
+                // Search Button
+                IconButton(
+                  icon: Icon(
+                    Icons.search_rounded,
+                    color: theme.colorScheme.primary,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const SearchPage(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                        transitionDuration: const Duration(milliseconds: 300),
+                      ),
+                    );
+                  },
+                  tooltip: 'Search restaurants',
+                ),
                 // Theme Toggle Button
                 Consumer<ThemeProvider>(
                   builder: (context, themeProvider, child) {
@@ -111,19 +138,19 @@ class RestaurantListPage extends StatelessWidget {
           builder: (context, provider, child) {
             return switch (provider.restaurantListState) {
               LoadingState() => const LoadingIndicator(
-                  message: 'Loading restaurants...',
-                ),
+                message: 'Loading restaurants...',
+              ),
               SuccessState<List<Restaurant>>(:final data) =>
                 _buildRestaurantList(context, data),
               ErrorState(:final message) => custom.ErrorWidget(
-                  message: message,
-                  onRetry: () => provider.fetchRestaurantList(),
-                ),
+                message: message,
+                onRetry: () => provider.fetchRestaurantList(),
+              ),
               NoDataState(:final message) => custom.EmptyStateWidget(
-                  message: 'No Restaurants',
-                  subtitle: message,
-                  icon: Icons.restaurant_menu_rounded,
-                ),
+                message: 'No Restaurants',
+                subtitle: message,
+                icon: Icons.restaurant_menu_rounded,
+              ),
             };
           },
         ),
@@ -131,7 +158,10 @@ class RestaurantListPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRestaurantList(BuildContext context, List<Restaurant> restaurants) {
+  Widget _buildRestaurantList(
+    BuildContext context,
+    List<Restaurant> restaurants,
+  ) {
     return RefreshIndicator(
       onRefresh: () async {
         await context.read<RestaurantProvider>().fetchRestaurantList();
@@ -157,10 +187,7 @@ class RestaurantListPage extends StatelessWidget {
         pageBuilder: (context, animation, secondaryAnimation) =>
             RestaurantDetailPage(restaurantId: restaurant.id),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
+          return FadeTransition(opacity: animation, child: child);
         },
         transitionDuration: const Duration(milliseconds: 300),
       ),

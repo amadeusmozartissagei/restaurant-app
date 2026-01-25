@@ -10,13 +10,13 @@ import 'ui/pages/restaurant_list_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Set preferred orientations
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  
+
   runApp(const MyApp());
 }
 
@@ -30,14 +30,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         // Theme Provider
-        ChangeNotifierProvider(
-          create: (_) => ThemeProvider(),
-        ),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
         // Restaurant Provider
         ChangeNotifierProvider(
-          create: (_) => RestaurantProvider(
-            apiService: ApiService(),
-          ),
+          create: (_) => RestaurantProvider(apiService: ApiService()),
         ),
       ],
       child: Consumer<ThemeProvider>(
@@ -45,12 +41,12 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Restaurant App',
             debugShowCheckedModeBanner: false,
-            
+
             // Theme Configuration
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeProvider.themeMode,
-            
+
             // Home Page
             home: const RestaurantListPage(),
           );

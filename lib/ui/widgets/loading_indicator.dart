@@ -6,11 +6,7 @@ class LoadingIndicator extends StatefulWidget {
   final String? message;
   final double size;
 
-  const LoadingIndicator({
-    super.key,
-    this.message,
-    this.size = 60,
-  });
+  const LoadingIndicator({super.key, this.message, this.size = 60});
 
   @override
   State<LoadingIndicator> createState() => _LoadingIndicatorState();
@@ -30,13 +26,15 @@ class _LoadingIndicatorState extends State<LoadingIndicator>
       vsync: this,
     )..repeat(reverse: true);
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    _opacityAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _opacityAnimation = Tween<double>(
+      begin: 0.5,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -48,7 +46,7 @@ class _LoadingIndicatorState extends State<LoadingIndicator>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -75,7 +73,9 @@ class _LoadingIndicatorState extends State<LoadingIndicator>
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.3,
+                          ),
                           blurRadius: 20,
                           spreadRadius: 5,
                         ),
@@ -121,14 +121,11 @@ class SpinningLoadingIndicator extends StatefulWidget {
   final double size;
   final Color? color;
 
-  const SpinningLoadingIndicator({
-    super.key,
-    this.size = 40,
-    this.color,
-  });
+  const SpinningLoadingIndicator({super.key, this.size = 40, this.color});
 
   @override
-  State<SpinningLoadingIndicator> createState() => _SpinningLoadingIndicatorState();
+  State<SpinningLoadingIndicator> createState() =>
+      _SpinningLoadingIndicatorState();
 }
 
 class _SpinningLoadingIndicatorState extends State<SpinningLoadingIndicator>
@@ -153,7 +150,7 @@ class _SpinningLoadingIndicatorState extends State<SpinningLoadingIndicator>
   @override
   Widget build(BuildContext context) {
     final color = widget.color ?? Theme.of(context).colorScheme.primary;
-    
+
     return RotationTransition(
       turns: _controller,
       child: Container(
@@ -161,10 +158,7 @@ class _SpinningLoadingIndicatorState extends State<SpinningLoadingIndicator>
         height: widget.size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(
-            color: color.withValues(alpha: 0.3),
-            width: 3,
-          ),
+          border: Border.all(color: color.withValues(alpha: 0.3), width: 3),
         ),
         child: Stack(
           children: [
@@ -174,10 +168,7 @@ class _SpinningLoadingIndicatorState extends State<SpinningLoadingIndicator>
               child: Container(
                 width: 10,
                 height: 10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: color,
-                ),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
               ),
             ),
           ],
