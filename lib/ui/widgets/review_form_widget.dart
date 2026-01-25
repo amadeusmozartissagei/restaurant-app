@@ -4,46 +4,30 @@ import '../../provider/restaurant_provider.dart';
 import '../../common/result_state.dart';
 
 /// Review Form Widget - Allows users to submit a review
-class ReviewFormWidget extends StatefulWidget {
+class ReviewFormWidget extends StatelessWidget {
   final String restaurantId;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  const ReviewFormWidget({super.key, required this.restaurantId});
+  ReviewFormWidget({super.key, required this.restaurantId});
 
-  @override
-  State<ReviewFormWidget> createState() => _ReviewFormWidgetState();
-}
-
-class _ReviewFormWidgetState extends State<ReviewFormWidget> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _reviewController = TextEditingController();
-  bool _isSubmitting = false;
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _reviewController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _submitReview() async {
+  Future<void> _submitReview(
+    BuildContext context,
+    TextEditingController nameController,
+    TextEditingController reviewController,
+  ) async {
     if (!_formKey.currentState!.validate()) return;
-
-    setState(() => _isSubmitting = true);
 
     final provider = context.read<RestaurantProvider>();
     final success = await provider.postReview(
-      restaurantId: widget.restaurantId,
-      name: _nameController.text.trim(),
-      review: _reviewController.text.trim(),
+      restaurantId: restaurantId,
+      name: nameController.text.trim(),
+      review: reviewController.text.trim(),
     );
 
-    setState(() => _isSubmitting = false);
-
-    if (success && mounted) {
+    if (success && context.mounted) {
       // Clear the form
-      _nameController.clear();
-      _reviewController.clear();
+      nameController.clear();
+      reviewController.clear();
 
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
@@ -62,7 +46,7 @@ class _ReviewFormWidgetState extends State<ReviewFormWidget> {
           ),
         ),
       );
-    } else if (mounted) {
+    } else if (context.mounted) {
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -83,9 +67,14 @@ class _ReviewFormWidgetState extends State<ReviewFormWidget> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // Create controllers - they will be recreated on each build
+    // but that's acceptable for this simple form
+    final nameController = TextEditingController();
+    final reviewController = TextEditingController();
 
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -135,7 +124,7 @@ class _ReviewFormWidgetState extends State<ReviewFormWidget> {
             const SizedBox(height: 20),
             // Name Field
             TextFormField(
-              controller: _nameController,
+              controller: nameController,
               decoration: InputDecoration(
                 labelText: 'Your Name',
                 hintText: 'Enter your name',
@@ -178,7 +167,7 @@ class _ReviewFormWidgetState extends State<ReviewFormWidget> {
             const SizedBox(height: 16),
             // Review Field
             TextFormField(
-              controller: _reviewController,
+              controller: reviewController,
               maxLines: 4,
               maxLength: 500,
               decoration: InputDecoration(
@@ -236,9 +225,13 @@ class _ReviewFormWidgetState extends State<ReviewFormWidget> {
                   final isLoading = provider.postReviewState is LoadingState;
 
                   return ElevatedButton(
-                    onPressed: _isSubmitting || isLoading
+                    onPressed: isLoading
                         ? null
-                        : _submitReview,
+                        : () => _submitReview(
+                              context,
+                              nameController,
+                              reviewController,
+                            ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: theme.colorScheme.primary,
                       foregroundColor: Colors.white,
@@ -248,7 +241,7 @@ class _ReviewFormWidgetState extends State<ReviewFormWidget> {
                       ),
                       elevation: 0,
                     ),
-                    child: _isSubmitting || isLoading
+                    child: isLoading
                         ? const SizedBox(
                             height: 20,
                             width: 20,

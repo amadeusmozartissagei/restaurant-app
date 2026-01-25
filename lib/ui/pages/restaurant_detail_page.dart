@@ -9,32 +9,29 @@ import '../widgets/error_widget.dart' as custom;
 import '../widgets/review_form_widget.dart';
 
 /// Restaurant Detail Page - Shows detailed information about a restaurant
-class RestaurantDetailPage extends StatefulWidget {
+class RestaurantDetailPage extends StatelessWidget {
   final String restaurantId;
 
   const RestaurantDetailPage({super.key, required this.restaurantId});
 
   @override
-  State<RestaurantDetailPage> createState() => _RestaurantDetailPageState();
-}
-
-class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
-  bool _isFirstLoad = true;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_isFirstLoad) {
-      _isFirstLoad = false;
-      context.read<RestaurantProvider>().fetchRestaurantDetail(
-        widget.restaurantId,
-      );
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    // Fetch restaurant detail when widget is first built
+    // This is called only once when the widget is inserted into the tree
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<RestaurantProvider>();
+      // Only fetch if not already loaded or if it's a different restaurant
+      if (provider.restaurantDetailState is! SuccessState<RestaurantDetail> ||
+          (provider.restaurantDetailState is SuccessState<RestaurantDetail> &&
+              (provider.restaurantDetailState as SuccessState<RestaurantDetail>)
+                      .data
+                      .id !=
+                  restaurantId)) {
+        provider.fetchRestaurantDetail(restaurantId);
+      }
+    });
 
     return Scaffold(
       body: Consumer<RestaurantProvider>(
@@ -56,7 +53,7 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
               body: custom.ErrorWidget(
                 message: message,
                 onRetry: () =>
-                    provider.fetchRestaurantDetail(widget.restaurantId),
+                    provider.fetchRestaurantDetail(restaurantId),
               ),
             ),
             NoDataState(:final message) => Scaffold(
