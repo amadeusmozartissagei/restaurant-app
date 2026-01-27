@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../provider/restaurant_provider.dart';
+import '../../provider/database_provider.dart';
 import '../../common/result_state.dart';
 import '../../common/theme.dart';
+import '../../data/models/restaurant.dart';
 import '../../data/models/restaurant_detail.dart';
 import '../widgets/loading_indicator.dart';
 import '../widgets/error_widget.dart' as custom;
@@ -10,6 +12,8 @@ import '../widgets/review_form_widget.dart';
 
 /// Restaurant Detail Page - Shows detailed information about a restaurant
 class RestaurantDetailPage extends StatelessWidget {
+  static const routeName = '/detail';
+
   final String restaurantId;
 
   const RestaurantDetailPage({super.key, required this.restaurantId});
@@ -105,6 +109,54 @@ class RestaurantDetailPage extends StatelessWidget {
           collapsedHeight: 80,
           pinned: true,
           leading: _buildBackButton(context, theme),
+          actions: [
+            Consumer<DatabaseProvider>(
+              builder: (context, provider, child) {
+                final isFavorited =
+                    provider.favorites.any((item) => item.id == restaurant.id);
+                return Container(
+                  margin: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: theme.cardTheme.color?.withValues(alpha: 0.9),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 8,
+                        spreadRadius: 1,
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    icon: Icon(
+                      isFavorited
+                          ? Icons.favorite_rounded
+                          : Icons.favorite_border_rounded,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      if (isFavorited) {
+                        provider.removeFavorite(restaurant.id);
+                      } else {
+                        final restaurantSimple = Restaurant(
+                          id: restaurant.id,
+                          name: restaurant.name,
+                          description: restaurant.description,
+                          pictureId: restaurant.pictureId,
+                          city: restaurant.city,
+                          rating: restaurant.rating,
+                        );
+                        provider.addFavorite(restaurantSimple);
+                      }
+                    },
+                    tooltip: isFavorited
+                        ? 'Remove from favorites'
+                        : 'Add to favorites',
+                  ),
+                );
+              },
+            ),
+          ],
           flexibleSpace: FlexibleSpaceBar(
             background: Hero(
               tag: 'restaurant-image-${restaurant.id}',

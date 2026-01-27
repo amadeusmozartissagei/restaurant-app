@@ -36,6 +36,17 @@ class Restaurant {
 
   String get smallImageUrl =>
       'https://restaurant-api.dicoding.dev/images/small/$pictureId';
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'pictureId': pictureId,
+      'city': city,
+      'rating': rating,
+    };
+  }
 }
 
 /// Restaurant List Response

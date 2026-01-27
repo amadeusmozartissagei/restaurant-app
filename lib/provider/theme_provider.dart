@@ -1,50 +1,29 @@
 import 'package:flutter/material.dart';
+import '../common/theme.dart';
+import '../data/preferences/preferences_helper.dart';
 
-/// Theme Provider to manage light/dark theme switching
 class ThemeProvider extends ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.system;
+  PreferencesHelper preferencesHelper;
 
-  ThemeMode get themeMode => _themeMode;
-
-  bool get isDarkMode {
-    return _themeMode == ThemeMode.dark;
+  ThemeProvider({required this.preferencesHelper}) {
+    _getTheme();
   }
 
-  bool get isLightMode {
-    return _themeMode == ThemeMode.light;
-  }
+  bool _isDarkTheme = false;
+  bool get isDarkTheme => _isDarkTheme;
 
-  /// Toggle between light and dark themes
-  void toggleTheme() {
-    if (_themeMode == ThemeMode.light) {
-      _themeMode = ThemeMode.dark;
-    } else {
-      _themeMode = ThemeMode.light;
-    }
+  ThemeMode get themeMode => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
+
+  ThemeData get themeData => _isDarkTheme ? AppTheme.darkTheme : AppTheme.lightTheme;
+
+  void _getTheme() async {
+    _isDarkTheme = await preferencesHelper.isDarkTheme;
     notifyListeners();
   }
 
-  /// Set specific theme mode
-  void setThemeMode(ThemeMode mode) {
-    _themeMode = mode;
-    notifyListeners();
-  }
-
-  /// Set light theme
-  void setLightMode() {
-    _themeMode = ThemeMode.light;
-    notifyListeners();
-  }
-
-  /// Set dark theme
-  void setDarkMode() {
-    _themeMode = ThemeMode.dark;
-    notifyListeners();
-  }
-
-  /// Set system theme
-  void setSystemMode() {
-    _themeMode = ThemeMode.system;
-    notifyListeners();
+  void enableDarkTheme(bool value) {
+    preferencesHelper.setDarkTheme(value);
+    _getTheme();
   }
 }
+

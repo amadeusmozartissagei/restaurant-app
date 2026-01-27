@@ -90,34 +90,8 @@ class RestaurantListPage extends StatelessWidget {
                   },
                   tooltip: 'Search restaurants',
                 ),
-                // Theme Toggle Button
-                Consumer<ThemeProvider>(
-                  builder: (context, themeProvider, child) {
-                    return IconButton(
-                      icon: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        transitionBuilder: (child, animation) {
-                          return RotationTransition(
-                            turns: animation,
-                            child: FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            ),
-                          );
-                        },
-                        child: Icon(
-                          themeProvider.themeMode == ThemeMode.dark
-                              ? Icons.light_mode_rounded
-                              : Icons.dark_mode_rounded,
-                          key: ValueKey(themeProvider.themeMode),
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
-                      onPressed: () => themeProvider.toggleTheme(),
-                      tooltip: 'Toggle theme',
-                    );
-                  },
-                ),
+                // Theme Toggle removed (moved to Settings)
+
                 // Refresh Button
                 IconButton(
                   icon: Icon(
