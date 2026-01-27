@@ -11,6 +11,7 @@ import 'data/api/api_service.dart';
 import 'data/db/database_helper.dart';
 import 'data/preferences/preferences_helper.dart';
 import 'provider/database_provider.dart';
+import 'provider/page_provider.dart';
 import 'provider/restaurant_provider.dart';
 import 'provider/scheduling_provider.dart';
 import 'provider/theme_provider.dart';
@@ -65,6 +66,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PageProvider(),
         ),
       ],
       child: Consumer<ThemeProvider>(

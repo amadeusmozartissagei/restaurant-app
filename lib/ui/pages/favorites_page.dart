@@ -16,38 +16,36 @@ class FavoritesPage extends StatelessWidget {
       ),
       body: Consumer<DatabaseProvider>(
         builder: (context, provider, child) {
-          if (provider.state == ResultState.loading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (provider.state == ResultState.hasData) {
-            return ListView.builder(
-              itemCount: provider.favorites.length,
+          return switch (provider.state) {
+            LoadingState() => const Center(child: CircularProgressIndicator()),
+            SuccessState(:final data) => ListView.builder(
+              itemCount: data.length,
               itemBuilder: (context, index) {
                 return RestaurantCard(
-                  restaurant: provider.favorites[index],
+                  restaurant: data[index],
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
                       return RestaurantDetailPage(
-                        restaurantId: provider.favorites[index].id,
+                        restaurantId: data[index].id,
                       );
                     }));
                   },
                 );
               },
-            );
-          } else if (provider.state == ResultState.noData) {
-            return const Center(
+            ),
+            NoDataState(:final message) => Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.favorite_border, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text('You have no favorites yet'),
+                  const Icon(Icons.favorite_border, size: 64, color: Colors.grey),
+                  const SizedBox(height: 16),
+                  Text(message),
                 ],
               ),
-            );
-          } else {
-            return Center(child: Text(provider.message));
-          }
+            ),
+            ErrorState(:final message) => Center(child: Text(message)),
+            _ => const SizedBox(),
+          };
         },
       ),
     );

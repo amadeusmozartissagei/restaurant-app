@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
+import '../common/result_state.dart';
 import '../data/db/database_helper.dart';
 import '../data/models/restaurant.dart';
-
-enum ResultState { loading, noData, hasData, error }
 
 class DatabaseProvider extends ChangeNotifier {
   final DatabaseHelper databaseHelper;
@@ -11,8 +10,8 @@ class DatabaseProvider extends ChangeNotifier {
     _getFavorites();
   }
 
-  ResultState _state = ResultState.loading;
-  ResultState get state => _state;
+  ResultState<List<Restaurant>> _state = const LoadingState();
+  ResultState<List<Restaurant>> get state => _state;
 
   String _message = '';
   String get message => _message;
@@ -23,9 +22,9 @@ class DatabaseProvider extends ChangeNotifier {
   void _getFavorites() async {
     _favorites = await databaseHelper.getFavorites();
     if (_favorites.isNotEmpty) {
-      _state = ResultState.hasData;
+      _state = SuccessState(_favorites);
     } else {
-      _state = ResultState.noData;
+      _state = const NoDataState('No favorites yet');
       _message = 'Empty Data';
     }
     notifyListeners();
@@ -36,7 +35,7 @@ class DatabaseProvider extends ChangeNotifier {
       await databaseHelper.insertFavorite(restaurant);
       _getFavorites();
     } catch (e) {
-      _state = ResultState.error;
+      _state = ErrorState('Error: $e');
       _message = 'Error: $e';
       notifyListeners();
     }
@@ -52,9 +51,10 @@ class DatabaseProvider extends ChangeNotifier {
       await databaseHelper.removeFavorite(id);
       _getFavorites();
     } catch (e) {
-      _state = ResultState.error;
+      _state = ErrorState('Error: $e');
       _message = 'Error: $e';
       notifyListeners();
     }
   }
 }
+
