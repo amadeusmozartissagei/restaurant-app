@@ -33,14 +33,12 @@ class RestaurantDetail {
       address: json['address'] ?? '',
       pictureId: json['pictureId'] ?? '',
       rating: (json['rating'] ?? 0).toDouble(),
-      categories:
-          (json['categories'] as List?)
+      categories: (json['categories'] as List?)
               ?.map((item) => Category.fromJson(item))
               .toList() ??
           [],
       menus: Menus.fromJson(json['menus'] ?? {}),
-      customerReviews:
-          (json['customerReviews'] as List?)
+      customerReviews: (json['customerReviews'] as List?)
               ?.map((item) => CustomerReview.fromJson(item))
               .toList() ??
           [],
@@ -75,13 +73,11 @@ class Menus {
 
   factory Menus.fromJson(Map<String, dynamic> json) {
     return Menus(
-      foods:
-          (json['foods'] as List?)
+      foods: (json['foods'] as List?)
               ?.map((item) => MenuItem.fromJson(item))
               .toList() ??
           [],
-      drinks:
-          (json['drinks'] as List?)
+      drinks: (json['drinks'] as List?)
               ?.map((item) => MenuItem.fromJson(item))
               .toList() ??
           [],

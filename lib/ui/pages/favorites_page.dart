@@ -19,32 +19,33 @@ class FavoritesPage extends StatelessWidget {
           return switch (provider.state) {
             LoadingState() => const Center(child: CircularProgressIndicator()),
             SuccessState(:final data) => ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                return RestaurantCard(
-                  restaurant: data[index],
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return RestaurantDetailPage(
-                        restaurantId: data[index].id,
-                      );
-                    }));
-                  },
-                );
-              },
-            ),
-            NoDataState(:final message) => Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.favorite_border, size: 64, color: Colors.grey),
-                  const SizedBox(height: 16),
-                  Text(message),
-                ],
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return RestaurantCard(
+                    restaurant: data[index],
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return RestaurantDetailPage(
+                          restaurantId: data[index].id,
+                        );
+                      }));
+                    },
+                  );
+                },
               ),
-            ),
+            NoDataState(:final message) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.favorite_border,
+                        size: 64, color: Colors.grey),
+                    const SizedBox(height: 16),
+                    Text(message),
+                  ],
+                ),
+              ),
             ErrorState(:final message) => Center(child: Text(message)),
-            _ => const SizedBox(),
           };
         },
       ),

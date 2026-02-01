@@ -35,18 +35,22 @@ void main() {
 
   group('RestaurantProvider Tests', () {
     test('should return LoadingState initially', () {
-      when(mockApiService.getRestaurantList()).thenAnswer((_) async => tResponse);
+      when(mockApiService.getRestaurantList())
+          .thenAnswer((_) async => tResponse);
       restaurantProvider = RestaurantProvider(apiService: mockApiService);
       expect(restaurantProvider.restaurantListState, isA<LoadingState>());
     });
 
-    test('should return SuccessState when data is fetched successfully', () async {
-      when(mockApiService.getRestaurantList()).thenAnswer((_) async => tResponse);
+    test('should return SuccessState when data is fetched successfully',
+        () async {
+      when(mockApiService.getRestaurantList())
+          .thenAnswer((_) async => tResponse);
       restaurantProvider = RestaurantProvider(apiService: mockApiService);
       await Future.delayed(const Duration(milliseconds: 100));
 
       expect(restaurantProvider.restaurantListState, isA<SuccessState>());
-      final state = restaurantProvider.restaurantListState as SuccessState<List<Restaurant>>;
+      final state = restaurantProvider.restaurantListState
+          as SuccessState<List<Restaurant>>;
       expect(state.data.length, tResponse.restaurants.length);
     });
 

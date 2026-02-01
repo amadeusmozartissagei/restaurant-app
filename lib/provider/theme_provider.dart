@@ -14,7 +14,8 @@ class ThemeProvider extends ChangeNotifier {
 
   ThemeMode get themeMode => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
 
-  ThemeData get themeData => _isDarkTheme ? AppTheme.darkTheme : AppTheme.lightTheme;
+  ThemeData get themeData =>
+      _isDarkTheme ? AppTheme.darkTheme : AppTheme.lightTheme;
 
   void _getTheme() async {
     _isDarkTheme = await preferencesHelper.isDarkTheme;
@@ -26,4 +27,3 @@ class ThemeProvider extends ChangeNotifier {
     _getTheme();
   }
 }
-

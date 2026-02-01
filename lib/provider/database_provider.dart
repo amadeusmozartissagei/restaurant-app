@@ -57,4 +57,3 @@ class DatabaseProvider extends ChangeNotifier {
     }
   }
 }
-

@@ -33,7 +33,7 @@ class SettingsPage extends StatelessWidget {
                   trailing: Switch.adaptive(
                     value: schedulingProvider.isScheduled,
                     onChanged: (value) async {
-                       await schedulingProvider.scheduledNews(value);
+                      await schedulingProvider.scheduledNews(value);
                     },
                   ),
                 ),

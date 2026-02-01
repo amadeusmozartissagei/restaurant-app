@@ -37,6 +37,8 @@ class NotificationHelper {
   Future<void> scheduleDaily11AM(
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
     tz.initializeTimeZones();
+    // Set timezone to Indonesia Western Time (WIB)
+    tz.setLocalLocation(tz.getLocation('Asia/Jakarta'));
     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
       'daily_reminder_channel',
       'Daily Reminder',
@@ -47,7 +49,8 @@ class NotificationHelper {
     );
     var iOSPlatformChannelSpecifics = const DarwinNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
 
     var dateTime = _nextInstanceElevenAM();
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../provider/restaurant_provider.dart';
-import '../../provider/theme_provider.dart';
 import '../../common/result_state.dart';
 import '../../data/models/restaurant.dart';
 import '../widgets/restaurant_card.dart';
@@ -79,11 +78,11 @@ class RestaurantListPage extends StatelessWidget {
                             const SearchPage(),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: child,
-                              );
-                            },
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
                         transitionDuration: const Duration(milliseconds: 300),
                       ),
                     );
@@ -112,19 +111,19 @@ class RestaurantListPage extends StatelessWidget {
           builder: (context, provider, child) {
             return switch (provider.restaurantListState) {
               LoadingState() => const LoadingIndicator(
-                message: 'Loading restaurants...',
-              ),
+                  message: 'Loading restaurants...',
+                ),
               SuccessState<List<Restaurant>>(:final data) =>
                 _buildRestaurantList(context, data),
               ErrorState(:final message) => custom.ErrorWidget(
-                message: message,
-                onRetry: () => provider.fetchRestaurantList(),
-              ),
+                  message: message,
+                  onRetry: () => provider.fetchRestaurantList(),
+                ),
               NoDataState(:final message) => custom.EmptyStateWidget(
-                message: 'No Restaurants',
-                subtitle: message,
-                icon: Icons.restaurant_menu_rounded,
-              ),
+                  message: 'No Restaurants',
+                  subtitle: message,
+                  icon: Icons.restaurant_menu_rounded,
+                ),
             };
           },
         ),

@@ -42,32 +42,31 @@ class RestaurantDetailPage extends StatelessWidget {
         builder: (context, provider, child) {
           return switch (provider.restaurantDetailState) {
             LoadingState() => Scaffold(
-              appBar: AppBar(leading: _buildBackButton(context, theme)),
-              body: const LoadingIndicator(
-                message: 'Loading restaurant details...',
+                appBar: AppBar(leading: _buildBackButton(context, theme)),
+                body: const LoadingIndicator(
+                  message: 'Loading restaurant details...',
+                ),
               ),
-            ),
             SuccessState<RestaurantDetail>(:final data) => _buildDetailContent(
-              context,
-              theme,
-              data,
-            ),
+                context,
+                theme,
+                data,
+              ),
             ErrorState(:final message) => Scaffold(
-              appBar: AppBar(leading: _buildBackButton(context, theme)),
-              body: custom.ErrorWidget(
-                message: message,
-                onRetry: () =>
-                    provider.fetchRestaurantDetail(restaurantId),
+                appBar: AppBar(leading: _buildBackButton(context, theme)),
+                body: custom.ErrorWidget(
+                  message: message,
+                  onRetry: () => provider.fetchRestaurantDetail(restaurantId),
+                ),
               ),
-            ),
             NoDataState(:final message) => Scaffold(
-              appBar: AppBar(leading: _buildBackButton(context, theme)),
-              body: custom.EmptyStateWidget(
-                message: 'Restaurant Not Found',
-                subtitle: message,
-                icon: Icons.restaurant_menu_rounded,
+                appBar: AppBar(leading: _buildBackButton(context, theme)),
+                body: custom.EmptyStateWidget(
+                  message: 'Restaurant Not Found',
+                  subtitle: message,
+                  icon: Icons.restaurant_menu_rounded,
+                ),
               ),
-            ),
           };
         },
       ),

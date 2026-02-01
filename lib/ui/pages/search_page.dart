@@ -91,16 +91,16 @@ class _SearchPageState extends State<SearchPage> {
         builder: (context, provider, child) {
           return switch (provider.searchState) {
             LoadingState() => const LoadingIndicator(
-              message: 'Searching restaurants...',
-            ),
+                message: 'Searching restaurants...',
+              ),
             SuccessState<List<Restaurant>>(:final data) => _buildSearchResults(
-              context,
-              data,
-            ),
+                context,
+                data,
+              ),
             ErrorState(:final message) => custom.ErrorWidget(
-              message: message,
-              onRetry: () => _onSearch(_searchController.text),
-            ),
+                message: message,
+                onRetry: () => _onSearch(_searchController.text),
+              ),
             NoDataState(:final message) => _buildEmptyState(context, message),
           };
         },

@@ -47,14 +47,22 @@ class ReviewFormWidget extends StatelessWidget {
         ),
       );
     } else if (context.mounted) {
+      // Get error message from provider state
+      String errorMessage = 'Failed to submit review. Please try again.';
+      if (provider.postReviewState is ErrorState) {
+        errorMessage = (provider.postReviewState as ErrorState).message;
+      }
+
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Row(
+          content: Row(
             children: [
-              Icon(Icons.error_outline, color: Colors.white),
-              SizedBox(width: 12),
-              Text('Failed to submit review. Please try again.'),
+              const Icon(Icons.error_outline, color: Colors.white),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(errorMessage),
+              ),
             ],
           ),
           backgroundColor: Colors.red,
@@ -62,11 +70,11 @@ class ReviewFormWidget extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
+          duration: const Duration(seconds: 4),
         ),
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
